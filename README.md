@@ -1,10 +1,10 @@
-# Face Detection
+# Ha Noi Path Finding
 
 This app is a small project for IT3160
 
 ## Installation (For Windows only)
 1. Open CMD in a new folder
-2. Git clone: [https://github.com/hieuleminh03/face-detection.git]()
+2. Git clone: [https://github.com/hieuleminh03/Hanoi_Path_Finding.git]()
 3. Create Python virtual environment 
 
 ```bash
@@ -22,9 +22,9 @@ Now the project is ready to run
 
 ## Usage
 
-1. Real-time face detection using webcam
-2. Emotions detection
-3. Age prediction
+1. Finding best path from A to B
+2. Changing weight of a road
+3. Graph visualization
 
 ## Contributing
 
