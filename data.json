@@ -1,11 +1,4 @@
 {
-    "ID":"1",
-    "START":"1",
-    "END":"2",
-    "WEIGHT":"1"
-}
-
-{
     "POINT_ID":"1",
     "POINT_NAME":"BACH KHOA",
     "RELATIVE":{

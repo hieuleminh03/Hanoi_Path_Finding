@@ -4,6 +4,10 @@ import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 from ttkbootstrap.dialogs import Messagebox
 
+import numpy as np
+import matplotlib.pyplot as plt
+
+
 PATH = Path(__file__).parent/'assets'
 
 
@@ -170,6 +174,7 @@ class PathFinder(ttk.Frame):
                                    text="Map",
                                    padding=10)
         map_frame.grid(row=0, column=0, sticky='nsew')
+        
         
         # A.2.2 noti frame
         noti_frame = ttk.Labelframe(col2,
