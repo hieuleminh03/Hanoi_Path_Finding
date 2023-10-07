@@ -55,14 +55,16 @@ class PathFinder(ttk.Frame):
             master=point_view_frame,
             values=["test 1", "test 2", "test 3"],
             state="readonly",
-            bootstyle="primary"
+            bootstyle="primary",
+            takefocus=False
         )
         start_combobox_up.grid(row=0, column=1)
         end_combobox_up = ttk.Combobox(
             master=point_view_frame,
             values=["test 1", "test 2", "test 3"],
             state="readonly",
-            bootstyle="primary"
+            bootstyle="primary",
+            takefocus=False
         )
         end_combobox_up.grid(row=1, column=1)
         
@@ -77,6 +79,7 @@ class PathFinder(ttk.Frame):
         open_map_button = ttk.Button(master=main_buttons_frame,
                               text="Open Map",
                               bootstyle="dark-outline",
+                              takefocus=False,
                               command=lambda: Messagebox.ok(
                                   title="Open Map",
                                   message="Opened Map"
@@ -85,6 +88,7 @@ class PathFinder(ttk.Frame):
         find_way_button = ttk.Button(master=main_buttons_frame,
                                     text="Find Way",
                                     bootstyle="success-outline",
+                                    takefocus=False,
                                     command=lambda: Messagebox.ok(
                                         title="Find Way",
                                         message="Found Way"
