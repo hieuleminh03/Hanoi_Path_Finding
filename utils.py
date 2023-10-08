@@ -1,5 +1,8 @@
 import json
 import random
+import os
+import matplotlib as plT
+import ttkbootstrap as ttkbs
 
 '''
     GUI utils
@@ -10,6 +13,7 @@ def get_all_points(data: json.load) -> dict:
     result = dict()
     for item in data:
         result[item.get('POINT_ID')] = item.get('POINT_NAME')
+    return result
 
 
 def get_relatives(data: json.load, id: int) -> list[int]:    
@@ -30,6 +34,7 @@ def update_weight(data: json.load, id1: int, id2: int, new_weight: int) -> None:
 def open_new_map(link: str) -> json.load:
     return json.load(link)
 
+    
 
 '''
     Data utils
@@ -62,12 +67,19 @@ def generate_data(total : int, limit : int) -> list[dict]:
                 point["point_limit"] = point["count"]
                 break
     return points
+
+def make_new_json(data: list[dict]) -> None:
+    # read how many data file is in \data
+    file_count = len([name for name in os.listdir("data/")])
+    # makke new file with name is file_count + 1.json with proper format
+    with open("data/" + str(file_count + 1) + ".json", "w") as file:
+        json.dump(data, file, indent=2)
+        file.close()
         
 
 def find_point(id: int) -> str:
     pass
 
 if __name__ == "__main__":
-    data = generate_data(6, 4)
-    for i in data:
-        print(i)
+    data = generate_data(10, 5)
+    make_new_json(data)
