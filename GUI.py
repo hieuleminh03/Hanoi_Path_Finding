@@ -6,6 +6,8 @@ from ttkbootstrap.dialogs import Messagebox
 
 import numpy as np
 import matplotlib.pyplot as plt
+import json
+import utils
 
 
 PATH = Path(__file__).parent/'assets'
@@ -49,6 +51,9 @@ class PathFinder(ttk.Frame):
         point_view_frame.grid_columnconfigure(0, weight=1)
         point_view_frame.grid_columnconfigure(1, weight=2)
         
+        self.current_start_point = str()
+        self.current_end_point = ""
+        
         ttk.Label(point_view_frame,
                   text="Start",
                   ).grid(row=0, column=0, padx=(30,0))
@@ -57,19 +62,32 @@ class PathFinder(ttk.Frame):
                   ).grid(row=1, column=0, padx=(30,0))
         start_combobox_up = ttk.Combobox(
             master=point_view_frame,
-            values=["test 1", "test 2", "test 3"],
+            values=[],
             state="readonly",
             bootstyle="primary",
             takefocus=False
         )
+        # add data to combobox
+        with open('data/4.json', 'r') as f:
+            data = json.load(f)
+        start_choices = []
+        for item in data:
+            start_choices.append(item.get('name'))
+        start_combobox_up.configure(values=start_choices)
+        start_combobox_up.bind("<<ComboboxSelected>>", lambda : {self.current_start_point.set(start_combobox_up.get())
+                                                                 ,end_combobox_up.configure(values=start_choices.remove(self.current_start_point))})
         start_combobox_up.grid(row=0, column=1)
+        
+        
         end_combobox_up = ttk.Combobox(
             master=point_view_frame,
-            values=["test 1", "test 2", "test 3"],
+            values=[],
             state="readonly",
             bootstyle="primary",
             takefocus=False
         )
+        # delete the data in start combobox
+        end_combobox_up.bind("<<ComboboxSelected>>", lambda event: self.current_end_point.set(end_combobox_up.get()))
         end_combobox_up.grid(row=1, column=1)
         
         # A.1.1.2. main buttons frame

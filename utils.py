@@ -27,9 +27,18 @@ def get_relatives(data: json.load, id: int) -> list[int]:
     return result
 
 
-def update_weight(data: json.load, id1: int, id2: int, new_weight: int) -> None:
-    pass
-
+def update_weight(data: list, id1: int, id2: int, new_weight: int) -> None:  
+    for item in data:   
+        if item.get('POINT_ID') == str(id1):    
+            relative = item.get("RELATIVE", {})   
+            if str(id2) in relative:         
+                relative[str(id2)] = new_weight     
+        if item.get('POINT_ID') == str(id2):        
+            relative = item.get("RELATIVE", {})      
+            if str(id1) in relative:        
+                relative[str(id1)] = new_weight   
+    with open('data.json', 'w') as f:      
+        json.dump(data, f, indent=4)
 
 def open_new_map(link: str) -> json.load:
     return json.load(link)
@@ -77,8 +86,10 @@ def make_new_json(data: list[dict]) -> None:
         file.close()
         
 
-def find_point(id: int) -> str:
-    pass
+def find_point(data: json.load, id: int) -> dict:  
+    for point in data :   
+        if point[ "POINT_ID"]== str(id) :      
+            return point
 
 if __name__ == "__main__":
     data = generate_data(10, 5)
