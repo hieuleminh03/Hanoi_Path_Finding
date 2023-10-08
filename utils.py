@@ -17,11 +17,11 @@ def get_all_points(data: json.load) -> dict:
 
 
 def get_relatives(data: json.load, id: int) -> list[int]:    
-    result = [int]   
+    result = []   
     for item in data:       
-        if item.get('POINT_ID') == str(id):        
-            print(item.get('POINT_ID'))       
-            relative = item.get("RELATIVE", {})         
+        if item.get('id') == id:        
+            print(item.get('id'))       
+            relative = item.get("relative", {})         
             result.extend([int(key) for key in relative.keys()])    
             return result
     return result
@@ -43,7 +43,18 @@ def update_weight(data: list, id1: int, id2: int, new_weight: int) -> None:
 def open_new_map(link: str) -> json.load:
     return json.load(link)
 
+def after_cbbox_selected(cbbox: ttkbs.Combobox, cbbox2: ttkbs.Combobox, start_point) -> None:
+    start_point = cbbox.get()
+    cbbox2.configure(values=[x for x in cbbox["values"] if x != start_point])
     
+def change_end_point(cbbox: ttkbs.Combobox, end_point) -> None:
+    end_point = cbbox.get()
+    
+def click_find_way(data : json.load, combobox):
+    name = combobox.get()
+    id = find_point_by_name(data, name)["id"]
+    realtives = get_relatives(data, id)
+    print(realtives)
 
 '''
     Data utils
@@ -86,9 +97,14 @@ def make_new_json(data: list[dict]) -> None:
         file.close()
         
 
-def find_point(data: json.load, id: int) -> dict:  
+def find_point_by_id(data: json.load, id: int) -> dict:  
     for point in data :   
-        if point[ "POINT_ID"]== str(id) :      
+        if point[ "id"]== str(id) :      
+            return point
+
+def find_point_by_name(data: json.load, name: str) -> dict:  
+    for point in data :   
+        if point[ "name"]== name :      
             return point
 
 if __name__ == "__main__":

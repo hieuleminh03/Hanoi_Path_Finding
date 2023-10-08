@@ -20,7 +20,7 @@ class PathFinder(ttk.Frame):
 
         # assets
         self.images = []
-
+        
         # A. make column
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
@@ -69,13 +69,11 @@ class PathFinder(ttk.Frame):
         )
         # add data to combobox
         with open('data/4.json', 'r') as f:
-            data = json.load(f)
+            self.data = json.load(f)
         start_choices = []
-        for item in data:
+        for item in self.data:
             start_choices.append(item.get('name'))
         start_combobox_up.configure(values=start_choices)
-        start_combobox_up.bind("<<ComboboxSelected>>", lambda : {self.current_start_point.set(start_combobox_up.get())
-                                                                 ,end_combobox_up.configure(values=start_choices.remove(self.current_start_point))})
         start_combobox_up.grid(row=0, column=1)
         
         
@@ -86,9 +84,11 @@ class PathFinder(ttk.Frame):
             bootstyle="primary",
             takefocus=False
         )
-        # delete the data in start combobox
-        end_combobox_up.bind("<<ComboboxSelected>>", lambda event: self.current_end_point.set(end_combobox_up.get()))
         end_combobox_up.grid(row=1, column=1)
+        
+        
+        end_combobox_up.bind("<<ComboboxSelected>>", lambda event: utils.change_end_point(end_combobox_up, self.current_end_point))
+        start_combobox_up.bind("<<ComboboxSelected>>", lambda event : utils.after_cbbox_selected(start_combobox_up, end_combobox_up, self.current_start_point))
         
         # A.1.1.2. main buttons frame
         main_buttons_frame = ttk.Frame(point_chooser_frame)
@@ -106,6 +106,8 @@ class PathFinder(ttk.Frame):
                                   title="Open Map",
                                   message="Opened Map"
                               ))
+        # add event to button
+        open_map_button.bind("<Button-1>", lambda event: utils.open_new_map("data/4.json"))
         open_map_button.grid(row=0, column=0, padx=5)
         find_way_button = ttk.Button(master=main_buttons_frame,
                                     text="Find Way",
@@ -115,6 +117,8 @@ class PathFinder(ttk.Frame):
                                         title="Find Way",
                                         message="Found Way"
                                     ))
+        # test event for find way button
+        find_way_button.bind("<Button-1>", lambda event: utils.click_find_way(self.data, start_combobox_up))
         find_way_button.grid(row=0, column=1, padx=5)
 
         # A.1.2. change weight frame
