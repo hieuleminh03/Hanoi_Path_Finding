@@ -1,8 +1,8 @@
 import json
 import random
 import os
-import matplotlib as plT
-import ttkbootstrap as ttkbs
+# import matplotlib as plT
+# import ttkbootstrap as ttkbs
 
 '''
     GUI utils
@@ -42,19 +42,19 @@ def update_weight(data: list, id1: int, id2: int, new_weight: int) -> None:
 
 def open_new_map(link: str) -> json.load:
     return json.load(link)
-
-def after_cbbox_selected(cbbox: ttkbs.Combobox, cbbox2: ttkbs.Combobox, start_point) -> None:
-    start_point = cbbox.get()
-    cbbox2.configure(values=[x for x in cbbox["values"] if x != start_point])
-    
-def change_end_point(cbbox: ttkbs.Combobox, end_point) -> None:
-    end_point = cbbox.get()
-    
-def click_find_way(data : json.load, combobox):
-    name = combobox.get()
-    id = find_point_by_name(data, name)["id"]
-    realtives = get_relatives(data, id)
-    print(realtives)
+#
+# def after_cbbox_selected(cbbox: ttkbs.Combobox, cbbox2: ttkbs.Combobox, start_point) -> None:
+#     start_point = cbbox.get()
+#     cbbox2.configure(values=[x for x in cbbox["values"] if x != start_point])
+#
+# def change_end_point(cbbox: ttkbs.Combobox, end_point) -> None:
+#     end_point = cbbox.get()
+#
+# def click_find_way(data : json.load, combobox):
+#     name = combobox.get()
+#     id = find_point_by_name(data, name)["id"]
+#     realtives = get_relatives(data, id)
+#     print(realtives)
 
 '''
     Data utils
@@ -73,14 +73,13 @@ def generate_data(total : int, limit : int) -> list[dict]:
     for point in points:
         # con thieu bao nhieu relative thi lap bay nhieu lan
         while point["point_limit"] > point["count"]:
-            suitable_relatives = [x for x in points 
-                      if x["id"] != point["id"] 
-                      and x["count"] < x["point_limit"]
-                      and x["id"] not in point["relative"].keys()]
+            suitable_relatives = [x for x in points
+                                  if x["id"] != point["id"]
+                                  and x["count"] < x["point_limit"]
+                                  and x["id"] not in point["relative"].keys()]
             if len(suitable_relatives) > 0:
                 relative = random.choice(suitable_relatives)
                 point["relative"][relative["id"]] = random.randint(1, 10)
-                relative["relative"][point["id"]] = point["relative"][relative["id"]]
                 relative["count"] += 1
                 point["count"] += 1
             else:
@@ -94,8 +93,23 @@ def make_new_json(data: list[dict]) -> None:
     # makke new file with name is file_count + 1.json with proper format
     with open("data/" + str(file_count + 1) + ".json", "w") as file:
         json.dump(data, file, indent=2)
-        file.close()
-        
+
+
+def convert_dict_grap(data: json.load) ->dict:
+    grap = {}
+    for point in data:
+        point_id = point.get("id")
+        relative_data =point.get("relative",{})
+        if point_id is not None :
+            grap[point_id]= [(key,value) for key,value in relative_data.items()]
+
+    return grap
+
+
+
+
+
+
 
 def find_point_by_id(data: json.load, id: int) -> dict:  
     for point in data :   
@@ -108,5 +122,8 @@ def find_point_by_name(data: json.load, name: str) -> dict:
             return point
 
 if __name__ == "__main__":
-    data = generate_data(10, 5)
-    make_new_json(data)
+    data = generate_data(6, 3)
+    with open('data/14.json','r') as f:
+        data= json.load(f)
+    formatted_result = json.dumps(convert_dict_grap(data))
+    print(formatted_result)

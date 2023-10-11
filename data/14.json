@@ -1,0 +1,55 @@
+[
+  {
+    "id": 1,
+    "name": "point 1",
+    "point_limit": 1,
+    "count": 1,
+    "relative": {
+      "6": 7
+    }
+  },
+  {
+    "id": 2,
+    "name": "point 2",
+    "point_limit": 3,
+    "count": 3,
+    "relative": {
+      "4": 9,
+      "5": 4,
+      "3": 1
+    }
+  },
+  {
+    "id": 3,
+    "name": "point 3",
+    "point_limit": 3,
+    "count": 3,
+    "relative": {
+      "6": 6,
+      "5": 1
+    }
+  },
+  {
+    "id": 4,
+    "name": "point 4",
+    "point_limit": 2,
+    "count": 2,
+    "relative": {
+      "6": 4
+    }
+  },
+  {
+    "id": 5,
+    "name": "point 5",
+    "point_limit": 2,
+    "count": 2,
+    "relative": {}
+  },
+  {
+    "id": 6,
+    "name": "point 6",
+    "point_limit": 3,
+    "count": 3,
+    "relative": {}
+  }
+]
