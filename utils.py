@@ -64,7 +64,7 @@ def generate_data(total : int, limit : int) -> list[dict]:
     points : list[dict] = [{} for i in range(total)]
     # cai dat cac thong so co ban cho cac diem
     for point in points:
-        point["id"] : int = points.index(point) + 1
+        point["id"] : str = str(points.index(point) + 1001)
         point["name"] : str = "point " + str(point["id"])
         point["point_limit"] : int = random.randint(1, limit)
         point["count"] : int = 0
@@ -102,11 +102,7 @@ def convert_dict_grap(data: json.load) ->dict:
         relative_data =point.get("relative",{})
         if point_id is not None :
             grap[point_id]= [(key,value) for key,value in relative_data.items()]
-
     return grap
-
-
-
 
 
 
@@ -122,8 +118,9 @@ def find_point_by_name(data: json.load, name: str) -> dict:
             return point
 
 if __name__ == "__main__":
-    data = generate_data(6, 3)
-    with open('data/14.json','r') as f:
+    # data = generate_data(6, 3)
+    # make_new_json(data)
+    # #
+    with open('data/16.json','r') as f:
         data= json.load(f)
-    formatted_result = json.dumps(convert_dict_grap(data))
-    print(formatted_result)
+    print( convert_dict_grap(data))
