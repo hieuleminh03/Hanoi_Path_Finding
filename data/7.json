@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "name": "point 1",
+    "point_limit": 4,
+    "count": 4,
+    "relative": {
+      "3": 10,
+      "6": 8,
+      "10": 10,
+      "5": 1
+    }
+  },
+  {
+    "id": 2,
+    "name": "point 2",
+    "point_limit": 3,
+    "count": 3,
+    "relative": {
+      "9": 1,
+      "10": 10,
+      "7": 2
+    }
+  },
+  {
+    "id": 3,
+    "name": "point 3",
+    "point_limit": 3,
+    "count": 3,
+    "relative": {
+      "8": 8,
+      "7": 8
+    }
+  },
+  {
+    "id": 4,
+    "name": "point 4",
+    "point_limit": 2,
+    "count": 2,
+    "relative": {
+      "7": 9,
+      "10": 5
+    }
+  },
+  {
+    "id": 5,
+    "name": "point 5",
+    "point_limit": 3,
+    "count": 3,
+    "relative": {
+      "9": 3,
+      "7": 7
+    }
+  },
+  {
+    "id": 6,
+    "name": "point 6",
+    "point_limit": 2,
+    "count": 2,
+    "relative": {
+      "9": 4
+    }
+  },
+  {
+    "id": 7,
+    "name": "point 7",
+    "point_limit": 4,
+    "count": 4,
+    "relative": {}
+  },
+  {
+    "id": 8,
+    "name": "point 8",
+    "point_limit": 1,
+    "count": 1,
+    "relative": {}
+  },
+  {
+    "id": 9,
+    "name": "point 9",
+    "point_limit": 3,
+    "count": 3,
+    "relative": {}
+  },
+  {
+    "id": 10,
+    "name": "point 10",
+    "point_limit": 3,
+    "count": 3,
+    "relative": {}
+  }
+]
