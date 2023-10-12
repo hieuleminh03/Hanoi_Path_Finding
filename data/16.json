@@ -6,7 +6,7 @@
     "count": 2,
     "relative": {
       "1005": 9,
-      "1004": 10
+      "1004": 5
     }
   },
   {
@@ -15,7 +15,7 @@
     "point_limit": 1,
     "count": 1,
     "relative": {
-      "1006": 7
+      "1004": 7
     }
   },
   {
@@ -24,7 +24,7 @@
     "point_limit": 1,
     "count": 1,
     "relative": {
-      "1006": 3
+      "1002": 3
     }
   },
   {
@@ -32,14 +32,18 @@
     "name": "point 1004",
     "point_limit": 1,
     "count": 1,
-    "relative": {}
+    "relative": {
+        "1005": 5
+    }
   },
   {
-    "id": "1005",
+    "id": "1001",
     "name": "point 1005",
     "point_limit": 1,
     "count": 1,
-    "relative": {}
+    "relative": {
+        "1006": 3
+    }
   },
   {
     "id": "1006",
