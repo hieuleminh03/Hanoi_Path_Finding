@@ -8,7 +8,7 @@ This app is a small project for IT3160
 3. Create Python virtual environment 
 
 ```bash
-python -m env .env
+python -m venv .env
 ```
 4. Activate the environment
 ```bash
