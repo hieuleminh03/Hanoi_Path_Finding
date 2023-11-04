@@ -36,8 +36,8 @@ class PathFinder(ttk.Frame):
         col1.grid(row=0, column=0, sticky='ns')
         col1.grid_columnconfigure(0, weight=1)
         col1.grid_rowconfigure(0, weight=3)
-        col1.grid_rowconfigure(1, weight=10)
-        col1.grid_rowconfigure(2, weight=1)
+        col1.grid_rowconfigure(1, weight=1)
+        col1.grid_rowconfigure(2, weight=10)
 
         # A.1.1. point chooser frame
         point_chooser_frame = ttk.Labelframe(col1,
@@ -116,7 +116,7 @@ class PathFinder(ttk.Frame):
         change_weight_frame = ttk.Labelframe(col1,
                                             text="Change Weight",
                                             padding=10)
-        change_weight_frame.grid(row=1, column=0, sticky='nsew')
+        change_weight_frame.grid(row=2, column=0, sticky='nsew')
         change_weight_frame.grid_rowconfigure(0, weight=3)
         change_weight_frame.grid_rowconfigure(1, weight=3)
         change_weight_frame.grid_rowconfigure(2, weight=1)
@@ -179,7 +179,7 @@ class PathFinder(ttk.Frame):
         algo_chooser_frame = ttk.Labelframe(col1,
                                             text="Algorithm Chooser",
                                             padding=10)
-        algo_chooser_frame.grid(row=2, column=0, sticky='nsew')
+        algo_chooser_frame.grid(row=1, column=0, sticky='nsew')
         
         ttk.Label(algo_chooser_frame,
                     text="Algorithm",

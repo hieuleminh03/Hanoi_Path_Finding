@@ -51,7 +51,7 @@ def get_relatives(data: json.load, id: int) -> list[int]:
     for item in data:
         if item.get('id') == id:
             relative = item.get("relative", {})
-            result.extend([int(key) for key in relative.keys()])
+            result.extend([key for key in relative.keys()])
             return result
     return result
 
