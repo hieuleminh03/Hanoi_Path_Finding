@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 import json
 import utils
 
+import algorithms
+
 
 PATH = Path(__file__).parent/'assets'
 
@@ -17,6 +19,14 @@ class PathFinder(ttk.Frame):
     def __init__(self, master):
         super().__init__(master)
         self.pack(fill=BOTH, expand=YES)
+        
+        self.current_find_path_start_point = None
+        self.current_find_path_end_point = None
+        self.current_weight_start_point = None
+        self.current_weight_end_point = None
+        self.current_algorithm = None
+        
+        self.json_file_path = None
 
         # assets
         self.images = []
@@ -102,13 +112,9 @@ class PathFinder(ttk.Frame):
         find_way_button = ttk.Button(master=main_buttons_frame,
                                     text="Find Way",
                                     bootstyle="success-outline",
-                                    takefocus=False,
-                                    command=lambda: Messagebox.ok(
-                                        title="Find Way",
-                                        message="Found Way"
-                                    ))
-        # test event for find way button
-        find_way_button.bind("<Button-1>", lambda event: utils.click_find_way(self.data, self.start_combobox_up))
+                                    takefocus=False
+                                    )
+        find_way_button.bind("<Button-1>", lambda event : self.find_way())
         find_way_button.grid(row=0, column=1, padx=5)
 
         # A.1.2. change weight frame
@@ -169,11 +175,9 @@ class PathFinder(ttk.Frame):
         weight_input.grid(row=0, column=1, sticky='ew', padx=(0,10))
         set_weight_button = ttk.Button(change_weight_buttons_frame,
                                         text="Set Weight",
-                                        bootstyle="primary-outline",
-                                        command=lambda: Messagebox.ok(
-                                            title="Set Weight",
-                                            message="Set Weight"
-                                        ))
+                                        bootstyle="primary-outline"
+                                        )
+        set_weight_button.bind("<Button-1>", lambda event : self.set_weight(weight_input.get()))
         set_weight_button.grid(row=0, column=2)
         
         # A.1.3 algo chooser frame
@@ -255,7 +259,10 @@ class PathFinder(ttk.Frame):
         self.noti_listbox.focus_set()
         self.start_combobox_down.selection_clear()
         self.noti_listbox.see(tk.END)
-        self.end_combobox_down.configure(values=[x for x in self.start_choices if x != self.current_weight_start_point])
+        relatives = algorithms.get_relatives(self.data, algorithms.find_point_by_name(self.data, self.current_weight_start_point).get('id'))
+        self.end_combobox_down.configure(values=[x.get('name') for x in self.data if x.get('id') in relatives])
+        self.end_combobox_down.set('')
+        self.current_weight_end_point = None
     def change_weight_end_point(self, cbbox: ttk.Combobox) -> None:
         self.current_weight_end_point = cbbox.get()    
         self.noti_listbox.insert(tk.END, str(self.noti_index)+ ". (Change Weight) Choose Ending Point: " + self.current_weight_end_point)
@@ -263,7 +270,6 @@ class PathFinder(ttk.Frame):
         self.noti_listbox.focus_set()
         self.end_combobox_down.selection_clear()
         self.noti_listbox.see(tk.END)
-        self.start_combobox_down.configure(values=[x for x in self.start_choices if x != self.current_weight_end_point])
         
     def change_algorithm(self, cbbox: ttk.Combobox) -> None:
         self.current_algorithm = cbbox.get()    
@@ -276,21 +282,94 @@ class PathFinder(ttk.Frame):
     def change_map(self):
         file_path = filedialog.askopenfilename(initialdir="./data/", title="Select a Map File", filetypes=(("JSON files", "*.json"), ("all files", "*.*")))
         if file_path:
-            with open(file_path, 'r') as f:
+            with open(file_path, 'r+') as f:
                 self.data = json.load(f)
+                self.json_file_path = file_path
             self.start_choices = []
             for item in self.data:
                 self.start_choices.append(item.get('name'))
             self.start_combobox_up.configure(values=self.start_choices)
             self.end_combobox_up.configure(values=self.start_choices)
             self.start_combobox_down.configure(values=self.start_choices)
-            self.end_combobox_down.configure(values=self.start_choices)
+            self.end_combobox_down.configure(values=[])
             self.noti_listbox.delete(0, tk.END)
             self.noti_listbox.insert(tk.END,"1. Open Map: " + file_path)
             self.noti_index=2
             self.noti_listbox.focus_set()
             self.noti_listbox.see(tk.END)
+            # clear the combo box
+            self.start_combobox_up.set('')
+            self.end_combobox_up.set('')
+            self.start_combobox_down.set('')
+            self.end_combobox_down.set('')
+            self.current_find_path_start_point = None
+            self.current_find_path_end_point = None
+            self.current_weight_start_point = None
+            self.current_weight_end_point = None
+    
+    def find_way(self):
+        if self.current_find_path_start_point == None:
+            Messagebox.show_error(title="Error", message="Please choose starting point")
+            return
+        elif self.current_find_path_end_point == None:
+            Messagebox.show_error(title="Error", message="Please choose ending point")
+            return
+        elif self.current_algorithm == None:
+            Messagebox.show_error(title="Error", message="Please choose algorithm")
+            return
+        else:
+            start_point = algorithms.find_point_by_name(self.data, self.current_find_path_start_point)
+            end_point = algorithms.find_point_by_name(self.data, self.current_find_path_end_point)
+            if start_point and end_point and self.current_algorithm and self.data:
+                path, cost = algorithms.call_algorithm(self.data, start_point, end_point, self.current_algorithm)
+                if len(path) == 0:
+                    self.noti_listbox.insert(tk.END, str(self.noti_index)+ ". (Find Path) No path found")
+                    self.noti_index+=1
+                    self.noti_listbox.see(tk.END)
+                else:
+                    self.noti_listbox.insert(tk.END, str(self.noti_index)+ ". (Find Path) Path found: " + str(path))
+                    self.noti_listbox.insert(tk.END,"Cost: " + str(cost))
+                    self.noti_index+=1
+                    self.noti_listbox.see(tk.END)
+            else:
+                Messagebox.show_error(title="Error", message="Something went wrong, please check the log")
 
+    def set_weight(self, weight: str):
+        if self.current_weight_start_point == None:
+            Messagebox.show_error(title="Error", message="Please choose starting point")
+            return
+        elif self.current_weight_end_point == None:
+            Messagebox.show_error(title="Error", message="Please choose ending point")
+            return
+        elif weight == "":
+            Messagebox.show_error(title="Error", message="Please input weight")
+            return
+        else:
+            start_point = algorithms.find_point_by_name(self.data, self.current_weight_start_point)
+            end_point = algorithms.find_point_by_name(self.data, self.current_weight_end_point)
+            if start_point and end_point and self.data:
+                try:
+                    weight = int(weight)
+                except:
+                    Messagebox.show_error(title="Error", message="Weight must be an integer")
+                    return
+                start_point["relative"][end_point["id"]] = weight
+                # modify json file
+                with open(self.json_file_path, 'r+') as f:
+                    data = json.load(f)                                                       
+                    for item in data:
+                        if item.get('id') == start_point.get('id'):
+                            del item["relative"][end_point['id']]
+                            item["relative"][end_point["id"]] = weight
+                    f.seek(0)
+                    f.truncate()
+                    json.dump(data, f, indent=2)
+                self.noti_listbox.insert(tk.END, str(self.noti_index)+ ". (Change Weight) Set weight: " + start_point["name"] + " - " + end_point["name"] + " = " + str(weight))
+                self.noti_index+=1
+                self.noti_listbox.see(tk.END)   
+            else:
+                Messagebox.show_error(title="Error", message="Something went wrong, please check the log")
+ 
         
 def app_config(app : ttk.Frame|ttk.Window):
     app.iconbitmap("./assets/icon.ico")
