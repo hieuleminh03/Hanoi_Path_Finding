@@ -6,22 +6,23 @@ import astar
 '''
 
 def call_algorithm(data: json.load, start_point: dict, end_point: dict, algorithm: str) -> list:
+    graph = convert_dict_grap(data)
     if algorithm == "UCS":
-        return UCS(data, start_point, end_point)
+        return UCS(graph, start_point, end_point)
     elif algorithm == "A*":
-        return a_star(data, start_point, end_point)
+        return a_star(graph, start_point, end_point)
     
 '''
     Algorithms
 '''
     
-def UCS(data: json.load, start_point: dict, end_point: dict) -> list:
-    return [],0
+def UCS(graph: dict, start_point: dict, end_point: dict) -> list:
+    answer = []
+    return answer
 
-def a_star(data: json.load, start_point: dict, end_point: dict) -> list:
-    grap_list = convert_dict_grap(data)
-
-    return [],0
+def a_star(graph: dict, start_point: dict, end_point: dict) -> list:
+    answer = astar.a_star(graph, start_point, end_point)
+    return answer
 
 '''
     Data tranform utils

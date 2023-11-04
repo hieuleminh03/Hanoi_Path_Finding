@@ -1,5 +1,4 @@
 from pathlib import Path
-from tkinter import PhotoImage
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 from ttkbootstrap.dialogs import Messagebox
@@ -8,12 +7,8 @@ from tkinter import filedialog
 
 import matplotlib.pyplot as plt
 import json
-import utils
 
 import algorithms
-
-
-PATH = Path(__file__).parent/'assets'
 
 class PathFinder(ttk.Frame):
     def __init__(self, master):
@@ -280,7 +275,7 @@ class PathFinder(ttk.Frame):
         cbbox.selection_clear()
         
     def change_map(self):
-        file_path = filedialog.askopenfilename(initialdir="./data/", title="Select a Map File", filetypes=(("JSON files", "*.json"), ("all files", "*.*")))
+        file_path = filedialog.askopenfilename(initialdir="", title="Select a Map File", filetypes=(("JSON files", "*.json"), ("all files", "*.*")))
         if file_path:
             with open(file_path, 'r+') as f:
                 self.data = json.load(f)
@@ -327,7 +322,10 @@ class PathFinder(ttk.Frame):
                     self.noti_index+=1
                     self.noti_listbox.see(tk.END)
                 else:
-                    self.noti_listbox.insert(tk.END, str(self.noti_index)+ ". (Find Path) Path found: " + str(path))
+                    output = ". Path found: "
+                    for point in path:
+                        output += algorithms.find_point_by_id(self.data, point).get('name') + " -> "
+                    self.noti_listbox.insert(tk.END, str(self.noti_index)+ output[:-4])
                     self.noti_listbox.insert(tk.END,"Cost: " + str(cost))
                     self.noti_index+=1
                     self.noti_listbox.see(tk.END)
@@ -372,7 +370,6 @@ class PathFinder(ttk.Frame):
  
         
 def app_config(app : ttk.Frame|ttk.Window):
-    app.iconbitmap("./assets/icon.ico")
     screen_width = app.winfo_screenwidth()
     screen_height = app.winfo_screenheight()
     x_cordinate = int((screen_width/2) - (1000/2))

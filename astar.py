@@ -48,20 +48,13 @@ def astar(graph, start, goal):
 
     return None, 0
 
-# Đồ thị có trọng số
-graph = {'1001': [('1002', 1)], '1002': [('1003', 5), ('1004', 2), ('1006', 7)], '1003': [('1006', 1), ('1005', 2)], '1004': [('1003', 1), ('1005', 4), ('1001', 2)], '1005': [('1004', 3)], '1006': []}
 
-
-start_node = '1001'
-goal_node = '1005'
-path, total_cost = astar(graph, start_node, goal_node)
-map_list=[]
-if path:
-    print("Đường đi tìm thấy:")
+def a_star(graph :dict, start_point: dict, end_point: dict) -> list:
+    start_node = start_point.get('id')
+    goal_node = end_point.get('id')
+    path, total_cost = astar(graph, start_node, goal_node)
+    points = []
     for node, _ in path:
-        map_list.append(node)
-        print(node)
-
-    print("Tổng trọng số:", total_cost)
-else:
-    print("Không tìm thấy đường đi")
+        points.append(node)
+    return [points, total_cost]
+    
