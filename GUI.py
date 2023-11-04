@@ -4,6 +4,7 @@ import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 from ttkbootstrap.dialogs import Messagebox
 import tkinter as tk
+from tkinter import filedialog
 
 import matplotlib.pyplot as plt
 import json
@@ -68,19 +69,12 @@ class PathFinder(ttk.Frame):
             bootstyle="primary",
             takefocus=False
         )
-        # add data to combobox
-        with open('data/4.json', 'r') as f:
-            self.data = json.load(f)
-        self.start_choices = []
-        for item in self.data:
-            self.start_choices.append(item.get('name'))
-        self.start_combobox_up.configure(values=self.start_choices)
         self.start_combobox_up.grid(row=0, column=1, pady=(0, 40))
         
         
         self.end_combobox_up = ttk.Combobox(
             master=point_view_frame,
-            values=self.start_choices,
+            values=[],
             state="readonly",
             bootstyle="primary",
             takefocus=False
@@ -102,12 +96,8 @@ class PathFinder(ttk.Frame):
                               text="Open Map",
                               bootstyle="dark-outline",
                               takefocus=False,
-                              command=lambda: Messagebox.ok(
-                                  title="Open Map",
-                                  message="Opened Map"
-                              ))
-        # add event to button
-        open_map_button.bind("<Button-1>", lambda event: utils.open_new_map("data/4.json"))
+                              command=lambda: self.change_map()
+                              )
         open_map_button.grid(row=0, column=0, padx=5)
         find_way_button = ttk.Button(master=main_buttons_frame,
                                     text="Find Way",
@@ -147,14 +137,14 @@ class PathFinder(ttk.Frame):
                     ).grid(row=1, column=0, padx=(30,0))    
         self.start_combobox_down = ttk.Combobox(
             master=change_weight_view_frame,
-            values=self.start_choices,
+            values=[],
             state="readonly",
             bootstyle="primary"
         )
         self.start_combobox_down.grid(row=0, column=1)
         self.end_combobox_down = ttk.Combobox(
             master=change_weight_view_frame,
-            values=self.start_choices,
+            values=[],
             state="readonly",
             bootstyle="primary"
         )
@@ -282,6 +272,25 @@ class PathFinder(ttk.Frame):
         self.noti_listbox.see(tk.END)
         self.noti_listbox.focus_set()
         cbbox.selection_clear()
+        
+    def change_map(self):
+        file_path = filedialog.askopenfilename(initialdir="./data/", title="Select a Map File", filetypes=(("JSON files", "*.json"), ("all files", "*.*")))
+        if file_path:
+            with open(file_path, 'r') as f:
+                self.data = json.load(f)
+            self.start_choices = []
+            for item in self.data:
+                self.start_choices.append(item.get('name'))
+            self.start_combobox_up.configure(values=self.start_choices)
+            self.end_combobox_up.configure(values=self.start_choices)
+            self.start_combobox_down.configure(values=self.start_choices)
+            self.end_combobox_down.configure(values=self.start_choices)
+            self.noti_listbox.delete(0, tk.END)
+            self.noti_listbox.insert(tk.END,"1. Open Map: " + file_path)
+            self.noti_index=2
+            self.noti_listbox.focus_set()
+            self.noti_listbox.see(tk.END)
+
         
 def app_config(app : ttk.Frame|ttk.Window):
     app.iconbitmap("./assets/icon.ico")
