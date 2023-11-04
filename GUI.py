@@ -4,7 +4,6 @@ import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 from ttkbootstrap.dialogs import Messagebox
 
-import numpy as np
 import matplotlib.pyplot as plt
 import json
 import utils
