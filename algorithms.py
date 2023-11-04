@@ -1,5 +1,6 @@
 import json
-
+import heapq
+import astar
 '''
     Call algorithms from other files
 '''
@@ -18,6 +19,8 @@ def UCS(data: json.load, start_point: dict, end_point: dict) -> list:
     return [],0
 
 def a_star(data: json.load, start_point: dict, end_point: dict) -> list:
+    grap_list = convert_dict_grap(data)
+
     return [],0
 
 '''

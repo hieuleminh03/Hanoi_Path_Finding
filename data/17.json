@@ -1,0 +1,59 @@
+[
+    {
+      "id": "1001",
+      "name": "point 1001",
+      "point_limit": 1,
+      "count": 1,
+      "relative": {
+        "1002": 1
+      }
+    },
+    {
+      "id": "1002",
+      "name": "point 1002",
+      "point_limit": 3,
+      "count": 3,
+      "relative": {
+        "1003": 5,
+        "1004": 2,
+        "1006": 7
+      }
+    },
+    {
+      "id": "1003",
+      "name": "point 1003",
+      "point_limit": 2,
+      "count": 2,
+      "relative": {
+        "1006": 1,
+        "1005": 2
+      }
+    },
+    {
+      "id": "1004",
+      "name": "point 1004",
+      "point_limit": 3,
+      "count": 3,
+      "relative": {
+          "1003": 1,
+          "1005": 4,
+          "1001": 2
+      }
+    },
+    {
+      "id": "1005",
+      "name": "point 1005",
+      "point_limit": 1,
+      "count": 1,
+      "relative": {
+          "1004": 3
+      }
+    },
+    {
+      "id": "1006",
+      "name": "point 1006",
+      "point_limit": 2,
+      "count": 2,
+      "relative": {}
+    }
+  ]
