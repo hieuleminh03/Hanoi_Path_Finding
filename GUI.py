@@ -3,6 +3,7 @@ from tkinter import PhotoImage
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 from ttkbootstrap.dialogs import Messagebox
+import tkinter as tk
 
 import matplotlib.pyplot as plt
 import json
@@ -10,7 +11,6 @@ import utils
 
 
 PATH = Path(__file__).parent/'assets'
-
 
 class PathFinder(ttk.Frame):
     def __init__(self, master):
@@ -61,7 +61,7 @@ class PathFinder(ttk.Frame):
         ttk.Label(point_view_frame,
                   text="End",
                   ).grid(row=1, column=0, padx=(30,0), pady=(0, 40))
-        start_combobox_up = ttk.Combobox(
+        self.start_combobox_up = ttk.Combobox(
             master=point_view_frame,
             values=[],
             state="readonly",
@@ -71,25 +71,24 @@ class PathFinder(ttk.Frame):
         # add data to combobox
         with open('data/4.json', 'r') as f:
             self.data = json.load(f)
-        start_choices = []
+        self.start_choices = []
         for item in self.data:
-            start_choices.append(item.get('name'))
-        start_combobox_up.configure(values=start_choices)
-        start_combobox_up.grid(row=0, column=1, pady=(0, 40))
+            self.start_choices.append(item.get('name'))
+        self.start_combobox_up.configure(values=self.start_choices)
+        self.start_combobox_up.grid(row=0, column=1, pady=(0, 40))
         
         
-        end_combobox_up = ttk.Combobox(
+        self.end_combobox_up = ttk.Combobox(
             master=point_view_frame,
-            values=[],
+            values=self.start_choices,
             state="readonly",
             bootstyle="primary",
             takefocus=False
         )
-        end_combobox_up.grid(row=1, column=1, pady=(0, 40))
-        
-        
-        end_combobox_up.bind("<<ComboboxSelected>>", lambda event: utils.change_end_point(end_combobox_up, self.current_end_point))
-        start_combobox_up.bind("<<ComboboxSelected>>", lambda event : utils.after_cbbox_selected(start_combobox_up, end_combobox_up, self.current_start_point))
+        self.end_combobox_up.grid(row=1, column=1, pady=(0, 40))
+         
+        self.start_combobox_up.bind("<<ComboboxSelected>>", lambda event : self.change_chooser_start_point(self.start_combobox_up))
+        self.end_combobox_up.bind("<<ComboboxSelected>>", lambda event : self.change_chooser_end_point(self.end_combobox_up))
         
         # A.1.1.2. main buttons frame
         main_buttons_frame = ttk.Frame(point_chooser_frame)
@@ -119,7 +118,7 @@ class PathFinder(ttk.Frame):
                                         message="Found Way"
                                     ))
         # test event for find way button
-        find_way_button.bind("<Button-1>", lambda event: utils.click_find_way(self.data, start_combobox_up))
+        find_way_button.bind("<Button-1>", lambda event: utils.click_find_way(self.data, self.start_combobox_up))
         find_way_button.grid(row=0, column=1, padx=5)
 
         # A.1.2. change weight frame
@@ -146,20 +145,23 @@ class PathFinder(ttk.Frame):
         ttk.Label(change_weight_view_frame,
                     text="End",
                     ).grid(row=1, column=0, padx=(30,0))    
-        start_combobox_down = ttk.Combobox(
+        self.start_combobox_down = ttk.Combobox(
             master=change_weight_view_frame,
-            values=["test 1", "test 2", "test 3"],
+            values=self.start_choices,
             state="readonly",
             bootstyle="primary"
         )
-        start_combobox_down.grid(row=0, column=1)
-        end_combobox_down = ttk.Combobox(
+        self.start_combobox_down.grid(row=0, column=1)
+        self.end_combobox_down = ttk.Combobox(
             master=change_weight_view_frame,
-            values=["test 1", "test 2", "test 3"],
+            values=self.start_choices,
             state="readonly",
             bootstyle="primary"
         )
-        end_combobox_down.grid(row=1, column=1)
+        self.end_combobox_down.grid(row=1, column=1)
+        
+        self.start_combobox_down.bind("<<ComboboxSelected>>", lambda event : self.change_weight_start_point(self.start_combobox_down))
+        self.end_combobox_down.bind("<<ComboboxSelected>>", lambda event : self.change_weight_end_point(self.end_combobox_down))
         
         # A.1.2.2. change weight buttons frame
         change_weight_buttons_frame = ttk.Frame(change_weight_frame)
@@ -195,17 +197,18 @@ class PathFinder(ttk.Frame):
                     ).grid(row=0, column=0, padx=(30,10), pady=(25,0))
         algo_combobox = ttk.Combobox(
             master=algo_chooser_frame,
-            values=["test 1", "test 2", "test 3"],
+            values=["UCS", "A*"],
             state="readonly",
             bootstyle="primary"
         )
         algo_combobox.grid(row=0, column=1, sticky='ew', padx=(30,10), pady=(25,0))
+        algo_combobox.bind("<<ComboboxSelected>>", lambda event : self.change_algorithm(algo_combobox))
         
         # A.2 column 2
         col2 = ttk.Frame(self, padding=10)
         col2.grid(row=0, column=1, sticky='nsew')
         col2.grid_columnconfigure(0, weight=1)
-        col2.grid_rowconfigure(0, weight=2)
+        col2.grid_rowconfigure(0, weight=100)
         col2.grid_rowconfigure(1, weight=1)
         
         # A.2.1 map visual frame
@@ -219,10 +222,66 @@ class PathFinder(ttk.Frame):
         noti_frame = ttk.Labelframe(col2,
                                     text="Notification",
                                     padding=10)
+        noti_frame.grid_propagate(False)
         noti_frame.grid(row=1, column=0, sticky='nsew')
-
+        # A.2.2.1 noti view frame
+        noti_view_frame = ttk.Frame(noti_frame)
+        noti_view_frame.grid(row=0, column=0, sticky='snew')
+        noti_view_frame.grid_rowconfigure(0, weight=1)
+        noti_view_frame.grid_columnconfigure(0, weight=1)
+        # add noti to noti view frame
+        # self.noti_text = ttk.Label(noti_view_frame,
+        #                       text="\n".join(self.noti_data),
+        #                       anchor='nw',
+        #                       justify='left')
+        # self.noti_text.grid(row=0, column=0, sticky='nsew')
         
+        self.noti_listbox = tk.Listbox(noti_frame, border=0, highlightthickness=0, borderwidth=0)
+        self.noti_listbox.pack(fill='both', expand=True)
+        self.noti_index = 1
     
+    
+    def change_chooser_start_point(self, cbbox: ttk.Combobox) -> None:
+        self.current_find_path_start_point = cbbox.get() 
+        self.noti_listbox.insert(tk.END, str(self.noti_index)+". (Find Path) Choose Starting Point: " + self.current_find_path_start_point)
+        self.noti_index+=1
+        self.noti_listbox.see(tk.END)
+        self.noti_listbox.focus_set() 
+        self.start_combobox_up.selection_clear() 
+        self.end_combobox_up.configure(values=[x for x in self.start_choices if x != self.current_find_path_start_point])
+    def change_chooser_end_point(self, cbbox: ttk.Combobox) -> None:
+        self.current_find_path_end_point = cbbox.get()    
+        self.noti_listbox.insert(tk.END, str(self.noti_index)+". (Find Path) Choose Ending Point: " + self.current_find_path_end_point)
+        self.noti_index+=1
+        self.noti_listbox.see(tk.END)
+        self.noti_listbox.focus_set() 
+        self.end_combobox_up.selection_clear() 
+        self.start_combobox_up.configure(values=[x for x in self.start_choices if x != self.current_find_path_end_point])
+        
+    def change_weight_start_point(self, cbbox: ttk.Combobox) -> None:
+        self.current_weight_start_point = cbbox.get() 
+        self.noti_listbox.insert(tk.END, str(self.noti_index)+ ". (Change Weight) Choose Starting Point: " + self.current_weight_start_point)
+        self.noti_index+=1
+        self.noti_listbox.focus_set()
+        self.start_combobox_down.selection_clear()
+        self.noti_listbox.see(tk.END)
+        self.end_combobox_down.configure(values=[x for x in self.start_choices if x != self.current_weight_start_point])
+    def change_weight_end_point(self, cbbox: ttk.Combobox) -> None:
+        self.current_weight_end_point = cbbox.get()    
+        self.noti_listbox.insert(tk.END, str(self.noti_index)+ ". (Change Weight) Choose Ending Point: " + self.current_weight_end_point)
+        self.noti_index+=1
+        self.noti_listbox.focus_set()
+        self.end_combobox_down.selection_clear()
+        self.noti_listbox.see(tk.END)
+        self.start_combobox_down.configure(values=[x for x in self.start_choices if x != self.current_weight_end_point])
+        
+    def change_algorithm(self, cbbox: ttk.Combobox) -> None:
+        self.current_algorithm = cbbox.get()    
+        self.noti_listbox.insert(tk.END, str(self.noti_index)+ ". Choose Algorithm: " + self.current_algorithm)
+        self.noti_index+=1
+        self.noti_listbox.see(tk.END)
+        self.noti_listbox.focus_set()
+        cbbox.selection_clear()
         
 def app_config(app : ttk.Frame|ttk.Window):
     app.iconbitmap("./assets/icon.ico")
