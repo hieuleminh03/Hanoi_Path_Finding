@@ -65,7 +65,6 @@ def astar(graph, start, goal):
 
     return None, 0
 
-
 def a_star(graph :dict, start_point: dict, end_point: dict) -> list:
     start_node = start_point.get('id')
     goal_node = end_point.get('id')
