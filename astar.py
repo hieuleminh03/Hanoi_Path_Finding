@@ -12,13 +12,30 @@ class Node:
         return (self.cost + self.heuristic) < (other.cost + other.heuristic)
 
 def astar(graph, start, goal):
-    def heuristic(state, goal):
-        return 0
+    def heuristic(grap, start_point, end_point):
+        visited = ()
+        queue = [( 0,[start_point])]
+        while queue:
+            (cost,path) = heapq.heappop(queue)
+            node = path[-1]
+            if node not in visited:
+                visited = visited + (node,)
+                if node == end_point:
+                    return  cost
+                for neighbor, weight in grap.get(node, ()):
+                    if neighbor not in visited:
+                        new_path = path + [neighbor]
+                        new_cost = cost + weight
+                        heapq.heappush(queue, (new_cost,new_path))
+        if(path[-1] != end_point):
+            return float('inf')
+        else:
+            return cost
 
     open_list = []  # Danh sách các nút chưa xử lý
     closed_list = set()  # Danh sách các nút đã xử lý
 
-    start_node = Node(state=start, cost=0, heuristic=heuristic(start, goal))
+    start_node = Node(state=start, cost=0, heuristic=heuristic(graph,start, goal))
     heapq.heappush(open_list, start_node)
 
     while open_list:
@@ -41,7 +58,7 @@ def astar(graph, start, goal):
             new_cost = current_node.cost + edge_cost
             new_node = Node(state=neighbor, parent=current_node,
                             action=None, cost=new_cost,
-                            heuristic=heuristic(neighbor, goal))
+                            heuristic=heuristic(graph,neighbor, goal))
 
             if new_node not in open_list:
                 heapq.heappush(open_list, new_node)
