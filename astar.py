@@ -70,7 +70,11 @@ def a_star(graph :dict, start_point: dict, end_point: dict) -> list:
     goal_node = end_point.get('id')
     path, total_cost = astar(graph, start_node, goal_node)
     points = []
-    for node, _ in path:
-        points.append(node)
-    return [points, total_cost]
+    print(path,total_cost)
+    if path == None:
+        return [points, total_cost]
+    else:
+        for node, _ in path:
+            points.append(node)
+        return [points, total_cost]
     

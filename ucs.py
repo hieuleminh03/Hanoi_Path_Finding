@@ -1,6 +1,6 @@
 import heapq
 
-def algorithm_ucs(grap: dict, start_point: str, end_point: str) -> tuple:
+def algorithm_ucs(grap, start_point, end_point):
     visited = ()
     queue = [(0, [start_point])]
     while queue:
