@@ -1,59 +1,60 @@
 [
     {
-      "id": "1001",
+      "id": "1",
       "name": "point 1001",
       "point_limit": 1,
       "count": 1,
       "relative": {
-        "1002": 1
+        "2": 1
       }
     },
     {
-      "id": "1002",
+      "id": "2",
       "name": "point 1002",
       "point_limit": 3,
       "count": 3,
       "relative": {
-        "1003": 5,
-        "1004": 2,
-        "1006": 7
+        "3": 5,
+        "4": 2,
+        "6": 7
       }
     },
     {
-      "id": "1003",
+      "id": "3",
       "name": "point 1003",
       "point_limit": 2,
       "count": 2,
       "relative": {
-        "1006": 1,
-        "1005": 2
+        "6": 1,
+        "5": 2
       }
     },
     {
-      "id": "1004",
+      "id": "4",
       "name": "point 1004",
       "point_limit": 3,
       "count": 3,
       "relative": {
-          "1003": 1,
-          "1005": 4,
-          "1001": 2
+          "3": 1,
+          "5": 4,
+          "1": 2
       }
     },
     {
-      "id": "1005",
+      "id": "5",
       "name": "point 1005",
       "point_limit": 1,
       "count": 1,
       "relative": {
-          "1004": 3
+          "4": 3
       }
     },
     {
-      "id": "1006",
+      "id": "6",
       "name": "point 1006",
       "point_limit": 2,
       "count": 2,
-      "relative": {}
+      "relative": {
+      }
     }
   ]

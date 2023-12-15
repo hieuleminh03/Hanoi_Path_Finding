@@ -2,11 +2,10 @@ import json
 import random
 import os
 import heapq
-'''
-    File manipulation utils
-'''
 
-
+'''
+    This function generate data for testing
+'''
 def generate_data(total: int, limit: int) -> list[dict]:
     # khoi tao mang chua cac diem
     points: list[dict] = [{} for i in range(total)]
@@ -35,12 +34,27 @@ def generate_data(total: int, limit: int) -> list[dict]:
                 break
     return points
 
+'''
+    function to write data to json file
+'''
 def make_new_json(data: list[dict]) -> None:
     # read how many data file is in \data
     file_count = len([name for name in os.listdir("data/")])
     # makke new file with name is file_count + 1.json with proper format
     with open("data/" + str(file_count + 1) + ".json", "w") as file:
         json.dump(data, file, indent=2)
+        
+'''
+    read json file
+'''
+def read_data(path: str) -> json.load:
+    with open(path, "r") as file:
+        try:
+            data = json.load(file)
+        except:
+            print("File not found or invalid file (when read json file)")
+            data = None
+    return data
 
 def algorithm_ucs(grap: dict, start_point: str, end_point: str) -> list:
     # visited cac dinh da duoc visited
@@ -68,8 +82,6 @@ def algorithm_ucs(grap: dict, start_point: str, end_point: str) -> list:
                     new_cost = cost + weight
                     heapq.heappush(queue, (new_cost,new_path))
     return  [],path
-
-
 
 if __name__ == "__main__":
     pass

@@ -1,3 +1,9 @@
+# this is an implementation of bellman ford algorithm
+
+import utils
+import algorithms
+
+
 class Graph:
     def __init__(self, vertices):
         self.V = vertices
@@ -5,6 +11,11 @@ class Graph:
 
     def addEdge(self, u, v, w):
         self.graph.append([u, v, w])
+
+    def getPathDetails(self, dest, dist, pred) -> list[int, list]:
+        path = self.reconstructPath(pred, dest)
+        total_weight = dist[dest]
+        return [total_weight, path]
 
     def printPathDetails(self, src, dest, dist, pred):
         path = self.reconstructPath(pred, dest)
@@ -31,22 +42,33 @@ class Graph:
 
         for _ in range(self.V - 1):
             for u, v, w in self.graph:
+                print(f"Checking edge ({u}, {v}) with weight {w}")
                 if dist[u] != float("Inf") and dist[u] + w < dist[v]:
                     dist[v] = dist[u] + w
                     pred[v] = u
 
-        self.printPathDetails(src, dest, dist, pred)
+        # self.printPathDetails(src, dest, dist, pred)
+        return self.getPathDetails(dest, dist, pred)
 
 
-# Example usage:
-g = Graph(5)
-g.addEdge(0, 1, 4)
-g.addEdge(0, 2, 2)
-g.addEdge(1, 3, 1)
-g.addEdge(2, 1, 1)
-g.addEdge(2, 3, 3)
-g.addEdge(3, 4, 5)
+'''
+    call bellman with prepared data
+'''
 
-source_vertex = 0
-destination_vertex = 4
-g.BellmanFord(source_vertex, destination_vertex)
+
+def call_bellman(graph: dict, start: int, dest: int) -> list[int, list]:
+    vertices_count = len(graph)
+    print("Vertices count: ", vertices_count)
+    g = Graph(vertices_count)
+    for node in graph:
+        for neighbor, weight in graph[node]:
+            g.addEdge(int(node), int(neighbor), int(weight))
+    print("Graph: ", g.graph)
+    data = g.BellmanFord(start, dest)
+    print("Weight: ", data[0])  # Access total_weight from the list
+    print("Path: ", data[1])    # Access path from the list
+
+
+if __name__ == "__main__":
+    graph: dict = algorithms.convert_dict_grap(utils.read_data('data.json'))
+    call_bellman(graph, 0, 4)
