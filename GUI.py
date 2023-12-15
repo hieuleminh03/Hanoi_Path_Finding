@@ -4,6 +4,7 @@ from ttkbootstrap.constants import *
 from ttkbootstrap.dialogs import Messagebox
 import tkinter as tk
 from tkinter import filedialog
+import time
 
 import matplotlib.pyplot as plt
 import json
@@ -315,10 +316,15 @@ class PathFinder(ttk.Frame):
         else:
             start_point = algorithms.find_point_by_name(self.data, self.current_find_path_start_point)
             end_point = algorithms.find_point_by_name(self.data, self.current_find_path_end_point)
+            start_time = time.monotonic_ns()
             if start_point and end_point and self.current_algorithm and self.data:
                 path, cost = algorithms.call_algorithm(self.data, start_point, end_point, self.current_algorithm)
+                end_time = time.monotonic_ns()
+                elapsed_time = end_time - start_time
+                print(elapsed_time)
                 if len(path) == 0:
-                    self.noti_listbox.insert(tk.END, str(self.noti_index)+ ". (Find Path) No path found")
+                    self.noti_listbox.insert(tk.END, str(self.noti_index)+ ". (Find Path) No path found.")
+                    self.noti_listbox.insert(tk.END,f"Time taken: {elapsed_time:.5f} s")
                     self.noti_index+=1
                     self.noti_listbox.see(tk.END)
                 else:
@@ -327,6 +333,7 @@ class PathFinder(ttk.Frame):
                         output += algorithms.find_point_by_id(self.data, point).get('name') + " -> "
                     self.noti_listbox.insert(tk.END, str(self.noti_index)+ output[:-4])
                     self.noti_listbox.insert(tk.END,"Cost: " + str(cost))
+                    self.noti_listbox.insert(tk.END,f"Time taken: {elapsed_time:.5f} s")
                     self.noti_index+=1
                     self.noti_listbox.see(tk.END)
             else:
