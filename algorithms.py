@@ -64,3 +64,14 @@ def convert_dict_grap(data: json.load) -> dict:
         if point_id is not None:
             grap[point_id] = [(key, value) for key, value in relative_data.items()]
     return grap
+
+def convert_dict_grap_with_name(data: list) -> dict:
+    grap = {}
+    # get name, id , relative to other name
+    for point in data:
+        point_id = point.get("id")
+        point_name = point.get("name")
+        relative_data = point.get("relative", {})
+        if point_id is not None:
+            grap[point_name] = [(item.get("name"), value) for item in data for key, value in relative_data.items() if item.get("id") == key]
+    return grap
