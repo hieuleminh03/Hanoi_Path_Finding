@@ -3,6 +3,7 @@ import heapq
 import astar
 import ucs
 import dijkstra
+import floyd
 '''
     Call algorithms from other files
 '''
@@ -15,6 +16,8 @@ def call_algorithm(data: json.load, start_point: dict, end_point: dict, algorith
         return a_star(graph, start_point, end_point)
     elif algorithm == "Dijkstra":
         return dijkstra_1(graph, start_point, end_point)
+    elif algorithm == "Floyd-Warshall":
+        return floyd.floyd_warshall(graph, start_point, end_point)
     
 '''
     Algorithms

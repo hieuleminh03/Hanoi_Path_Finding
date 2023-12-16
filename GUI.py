@@ -198,7 +198,7 @@ class PathFinder(ttk.Frame):
                   ).grid(row=0, column=0, padx=(30, 10), pady=(25, 0))
         algo_combobox = ttk.Combobox(
             master=algo_chooser_frame,
-            values=["UCS", "A*","Dijkstra"],
+            values=["UCS", "A*","Dijkstra", "Floyd-Warshall"],
             state="readonly",
             bootstyle="primary"
         )
@@ -349,11 +349,11 @@ class PathFinder(ttk.Frame):
                 self.data, self.current_find_path_start_point)
             end_point = algorithms.find_point_by_name(
                 self.data, self.current_find_path_end_point)
-            start_time = time.monotonic_ns()
+            start_time = time.time()
             if start_point and end_point and self.current_algorithm and self.data:
                 path, cost = algorithms.call_algorithm(
                     self.data, start_point, end_point, self.current_algorithm)
-                end_time = time.monotonic_ns()
+                end_time = time.time()
                 elapsed_time = end_time - start_time
                 print(elapsed_time)
                 if len(path) == 0:
@@ -430,7 +430,7 @@ class map:
         self.data = None
         self.window = window.map_frame
         self.button = ttk.Button(
-            self.window, text="check", command=self.load_map)
+            self.window, text="Map", command=self.load_map)
         self.button.grid(row=0, column=0, sticky='ns')
 
     def load_map(self):

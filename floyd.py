@@ -43,3 +43,7 @@ if __name__ == "__main__":
     graph = algorithms.convert_dict_grap(utils.read_data('data.json'))
     result_matrix = FloydWarshall.floyd_warshall(graph, "1", "5")
     print(result_matrix)
+    
+def floyd_warshall(graph, start_point, end_point):
+    result_matrix = FloydWarshall.floyd_warshall(graph, start_point.get('id'), end_point.get('id'))
+    return result_matrix
