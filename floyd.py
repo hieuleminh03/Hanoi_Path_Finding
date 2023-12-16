@@ -3,7 +3,8 @@ import algorithms
 import utils
 
 class FloydWarshall:
-    def floyd_warshall(graph):
+    @staticmethod
+    def floyd_warshall(graph: dict, start_point: dict, end_point: dict) -> list:
         nodes = list(graph.keys())
         n = len(nodes)
 
@@ -25,13 +26,12 @@ class FloydWarshall:
                         distance_matrix[i][j] = distance_matrix[i][k] + distance_matrix[k][j]
                         next_node_matrix[i][j] = next_node_matrix[i][k]
 
-        return distance_matrix, next_node_matrix
+        shortest_distance = distance_matrix[start_point][end_point]
+        shortest_path = FloydWarshall.get_shortest_path(next_node_matrix, start_point, end_point)
 
+        return [shortest_path, shortest_distance]
 
-    def get_shortest_distance(result_matrix, node1, node2):
-        return result_matrix[node1][node2]
-
-
+    @staticmethod
     def get_shortest_path(next_node_matrix, node1, node2):
         path = [node1]
         while node1 != node2:
@@ -41,10 +41,5 @@ class FloydWarshall:
 
 if __name__ == "__main__":
     graph = algorithms.convert_dict_grap(utils.read_data('data.json'))
-    result_matrix, next_node_matrix = FloydWarshall.floyd_warshall(graph)
-    node1 = '1'
-    node2 = '5'
-    shortest_distance = FloydWarshall.get_shortest_distance(result_matrix, node1, node2)
-    shortest_path = FloydWarshall.get_shortest_path(next_node_matrix, node1, node2)
-    print(f"Shortest distance between node {node1} and node {node2}: {shortest_distance}")
-    print(f"Shortest path: {' -> '.join(map(str, shortest_path))}")
+    result_matrix = FloydWarshall.floyd_warshall(graph, "1", "5")
+    print(result_matrix)
