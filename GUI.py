@@ -6,6 +6,7 @@ from ttkbootstrap.dialogs import Messagebox
 import tkinter as tk
 from tkinter import filedialog
 import time
+import scipy as sp
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -430,7 +431,7 @@ class map:
         self.window = window.map_frame
         self.button = ttk.Button(
             self.window, text="check", command=self.load_map)
-        self.button.grid(row=1, column=1, sticky='ns')
+        self.button.grid(row=0, column=0, sticky='ns')
 
     def load_map(self):
         global map_data
@@ -441,7 +442,6 @@ class map:
         nodes_name = list(map_data.keys())
         # add nodes to graph
         graph.add_nodes_from(nodes_name)
-        print("Node Name: ", nodes_name)
         # get all edges from dict
         edges = []
         status = 0
@@ -453,13 +453,12 @@ class map:
                         goal = relative
                         status = 1
                     else:
-                        edges.append((node, goal, int(relative)))
+                        edges.append((node, goal, {"weight": int(relative)}))
                         status = 0
-        print(edges)
         # add edges to graph
         graph.add_edges_from(edges)
         # random layout
-        layout = nx.spring_layout(graph)
+        layout = nx.kamada_kawai_layout(graph)
         f = plt.Figure(figsize=(10,10), dpi=120)
         f.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=None, hspace=None)
         a = f.add_subplot()
