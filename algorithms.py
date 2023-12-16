@@ -2,6 +2,7 @@ import json
 import heapq
 import astar
 import ucs
+import dijkstra
 '''
     Call algorithms from other files
 '''
@@ -12,6 +13,8 @@ def call_algorithm(data: json.load, start_point: dict, end_point: dict, algorith
         return UCS(graph, start_point, end_point)
     elif algorithm == "A*":
         return a_star(graph, start_point, end_point)
+    elif algorithm == "Dijkstra":
+        return dijkstra_1(graph, start_point, end_point)
     
 '''
     Algorithms
@@ -23,6 +26,10 @@ def UCS(graph: dict, start_point: dict, end_point: dict) -> list:
 
 def a_star(graph: dict, start_point: dict, end_point: dict) -> list:
     answer = astar.a_star(graph, start_point, end_point)
+    return answer
+
+def dijkstra_1(graph: dict, start_point: dict, end_point: dict) -> list:
+    answer = dijkstra.dijkstra_1(graph, start_point, end_point)
     return answer
 
 '''

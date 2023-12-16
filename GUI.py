@@ -198,7 +198,7 @@ class PathFinder(ttk.Frame):
                   ).grid(row=0, column=0, padx=(30, 10), pady=(25, 0))
         algo_combobox = ttk.Combobox(
             master=algo_chooser_frame,
-            values=["UCS", "A*"],
+            values=["UCS", "A*","Dijkstra"],
             state="readonly",
             bootstyle="primary"
         )
